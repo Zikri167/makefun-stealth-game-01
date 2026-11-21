@@ -30,7 +30,7 @@ export function applyShot(game) {
   if (!shot) return;
   game.state = 'playing';
   game.shotFrozen = true; // the pose holds while the picture is taken
-  const g = game.guards;
+  let g = game.guards;
 
   if (shot === 'start') {
     game.state = 'title';
@@ -61,12 +61,16 @@ export function applyShot(game) {
 
   if (shot === 'exit') {
     // Every relic stolen, the exit open and glowing, one last guard
-    // between the courier and the door.
+    // between the courier and the door. Posed on level 2, so the sheet
+    // shows the game has more than one level in it.
+    game.loadLevel(1);
+    g = game.guards; // loadLevel replaces the guards: re-read them
     for (const r of game.world.relics) r.taken = true;
-    posePlayer(game, 26, 13, 0);
-    poseGuard(g[0], 10, 10, -Math.PI / 2, 0, 'patrol');
-    poseGuard(g[1], 20, 11, Math.PI, 0.2, 'patrol');
-    poseGuard(g[2], 25, 10, Math.PI / 2, 0.55, 'stare');
+    posePlayer(game, 25, 13, 0);
+    poseGuard(g[0], 20, 10, Math.PI, 0.2, 'patrol');
+    poseGuard(g[1], 26, 10, Math.PI / 2, 0, 'patrol');
+    poseGuard(g[2], 13, 12, 0, 0, 'patrol');
+    poseGuard(g[3], 28, 8, Math.PI / 2, 0.55, 'stare');
     return;
   }
 }
