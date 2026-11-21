@@ -7,11 +7,11 @@
 import { TILE, MAP_W, MAP_H, VIEW_W, VIEW_H, GUARD } from './config.js';
 import { CHASE, INVESTIGATE, STARE } from './guard.js';
 
-const FLOOR_A = '#2a2118';
-const FLOOR_B = '#241c14';
-const WALL_TOP = '#5d4632';
-const WALL_SIDE = '#3a2c1e';
-const WALL_EDGE = '#7a5c3e';
+const FLOOR_A = '#33291d';
+const FLOOR_B = '#2b2115';
+const WALL_TOP = '#6b5138';
+const WALL_SIDE = '#453522';
+const WALL_EDGE = '#8a6a45';
 const CRATE = '#6b4a26';
 const CRATE_EDGE = '#8a6136';
 const BUSH = '#1e3a1f';
@@ -62,12 +62,53 @@ export class Renderer {
           ctx.fillRect(px + 2, py + 2, TILE - 4, TILE - 10);
           ctx.fillStyle = WALL_EDGE;
           ctx.fillRect(px + 2, py + TILE - 8, TILE - 4, 2);
+          // Wall lanterns: a warm glow where a wall meets the floor,
+          // placed by the tile's own coordinates so it never moves.
+          const below = ty + 1 < MAP_H ? world.tileAt(tx, ty + 1) : '#';
+          const h = (tx * 83492791) ^ (ty * 2971215073);
+          if (below !== '#' && (((h ^ (h >>> 11)) >>> 0) % 6 === 0)) {
+            const lx = px + TILE / 2;
+            const ly = py + TILE - 6;
+            const glow = ctx.createRadialGradient(lx, ly, 2, lx, ly, 34);
+            glow.addColorStop(0, 'rgba(255,190,90,0.5)');
+            glow.addColorStop(1, 'rgba(255,190,90,0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(lx, ly, 34, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffd27a';
+            ctx.beginPath();
+            ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#5d4632';
+            ctx.fillRect(lx - 5, ly - 8, 10, 4);
+          }
         } else {
           ctx.fillStyle = (tx + ty) % 2 === 0 ? FLOOR_A : FLOOR_B;
           ctx.fillRect(px, py, TILE, TILE);
           // Faint tile seams.
           ctx.strokeStyle = 'rgba(0,0,0,0.12)';
           ctx.strokeRect(px + 0.5, py + 0.5, TILE, TILE);
+          // Deterministic floor dressing from the tile's own coordinates,
+          // so every run paints the same archive: a rug here, a mosaic
+          // there, never a bare stretch of floor.
+          const h = (tx * 73856093) ^ (ty * 19349663);
+          const hh = ((h ^ (h >>> 13)) >>> 0) % 29;
+          if (hh === 0) {
+            ctx.fillStyle = 'rgba(122,52,44,0.55)';
+            ctx.fillRect(px + 4, py + 4, TILE - 8, TILE - 8);
+            ctx.strokeStyle = 'rgba(220,170,90,0.5)';
+            ctx.strokeRect(px + 7.5, py + 7.5, TILE - 15, TILE - 15);
+          } else if (hh === 1) {
+            ctx.fillStyle = 'rgba(220,190,120,0.16)';
+            ctx.beginPath();
+            ctx.moveTo(px + TILE / 2, py + 6);
+            ctx.lineTo(px + TILE - 6, py + TILE / 2);
+            ctx.lineTo(px + TILE / 2, py + TILE - 6);
+            ctx.lineTo(px + 6, py + TILE / 2);
+            ctx.closePath();
+            ctx.fill();
+          }
         }
         if (ch === 'C') {
           ctx.fillStyle = CRATE;
