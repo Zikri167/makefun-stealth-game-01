@@ -59,6 +59,20 @@ export function applyShot(game) {
     return;
   }
 
+  if (shot === 'chase') {
+    // The climax: the alarm is up, a guard is giving chase with a red
+    // cone and a "!", and the courier sprints the last steps to the
+    // open exit with every relic in hand. A near miss, not a capture.
+    for (const r of game.world.relics) r.taken = true;
+    posePlayer(game, 24, 13, 0);
+    game.player.sneaking = false;
+    poseGuard(g[0], 20, 10, Math.PI, 0.2, 'patrol');
+    poseGuard(g[1], 12, 8, 0, 0.6, 'stare');
+    poseGuard(g[2], 26, 11, Math.PI * 0.75, 1, 'chase');
+    g[2].lastSeen = { x: game.player.x, y: game.player.y };
+    return;
+  }
+
   if (shot === 'lure') {
     // The pebble trick, mid-lure: the courier crouches behind a crate
     // while a guard turns toward the clatter, its noise ring spreading.
