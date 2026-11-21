@@ -59,6 +59,25 @@ export function applyShot(game) {
     return;
   }
 
+  if (shot === 'lure') {
+    // The pebble trick, mid-lure: the courier crouches behind a crate
+    // while a guard turns toward the clatter, its noise ring spreading.
+    // This is the one screenshot that shows the distraction mechanic.
+    posePlayer(game, 8, 12, 0);
+    const px = (14.5) * TILE;
+    const py = (10.5) * TILE;
+    game.player.pebble = {
+      x: px, y: py, tx: px, ty: py,
+      t: 0.28, dur: 0.28, landed: true, ring: 110,
+      noiseAt: { x: px, y: py },
+    };
+    poseGuard(g[0], 17, 10, Math.PI, 0.45, 'investigate');
+    g[0].investigateTarget = { x: px, y: py };
+    poseGuard(g[1], 20, 8, Math.PI, 0.1, 'patrol');
+    poseGuard(g[2], 26, 13, -Math.PI / 2, 0, 'patrol');
+    return;
+  }
+
   if (shot === 'exit') {
     // Every relic stolen, the exit open and glowing, one last guard
     // between the courier and the door. Posed on level 2, so the sheet
