@@ -4,7 +4,7 @@
 // Map legend (32 wide x 18 tall, one char per tile):
 //   # wall (blocks sight + movement)   . floor
 //   C crate (cover: blocks sight + movement)
-//   B bush (hide zone: walkable, you are hidden inside unless a guard is very close)
+//   B planter (a potted fern: hide zone, walkable, you are hidden inside unless a guard is very close)
 //   S shadow (hide zone: walkable, dark floor, same hiding rule as a bush)
 //   P player start   R relic (collect)   E exit   G guard spawn
 // Guard patrol routes are listed per level as tile waypoints.
