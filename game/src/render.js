@@ -33,7 +33,7 @@ export class Renderer {
   drawCone(guard) {
     const ctx = this.ctx;
     const color = guard.state === CHASE ? RED : guard.suspicion >= GUARD.suspiciousAt ? ORANGE : AMBER;
-    const alpha = guard.state === CHASE ? 0.34 : guard.suspicion >= GUARD.suspiciousAt ? 0.28 : 0.2;
+    const alpha = guard.state === CHASE ? 0.38 : guard.suspicion >= GUARD.suspiciousAt ? 0.32 : 0.24;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(guard.x, guard.y);
@@ -83,23 +83,38 @@ export class Renderer {
           ctx.stroke();
           ctx.lineWidth = 1;
         } else if (ch === 'B') {
+          // A potted fern in a terracotta planter: archive greenery you
+          // can crouch behind. The pot marks it as cover at a glance.
+          ctx.fillStyle = '#7a4a28';
+          ctx.fillRect(px + 9, py + 24, TILE - 18, 12);
+          ctx.fillStyle = '#93592f';
+          ctx.fillRect(px + 9, py + 24, TILE - 18, 3);
           ctx.fillStyle = BUSH;
           ctx.beginPath();
-          ctx.arc(px + 14, py + 16, 13, 0, Math.PI * 2);
+          ctx.arc(px + 14, py + 16, 12, 0, Math.PI * 2);
           ctx.arc(px + 26, py + 12, 11, 0, Math.PI * 2);
-          ctx.arc(px + 22, py + 28, 12, 0, Math.PI * 2);
+          ctx.arc(px + 22, py + 24, 11, 0, Math.PI * 2);
           ctx.fill();
           ctx.fillStyle = BUSH_LEAF;
           ctx.beginPath();
           ctx.arc(px + 13, py + 13, 5, 0, Math.PI * 2);
-          ctx.arc(px + 25, py + 24, 5, 0, Math.PI * 2);
+          ctx.arc(px + 25, py + 22, 5, 0, Math.PI * 2);
           ctx.arc(px + 27, py + 11, 4, 0, Math.PI * 2);
           ctx.fill();
         } else if (ch === 'S') {
+          // A patch of safe darkness: deep indigo, edged in faint
+          // moonlight so it reads as a hiding place, not a dim floor.
           ctx.fillStyle = SHADOW;
           ctx.fillRect(px + 1, py + 1, TILE - 2, TILE - 2);
-          ctx.fillStyle = 'rgba(120,90,180,0.10)';
-          ctx.fillRect(px + 6, py + 6, TILE - 12, TILE - 12);
+          ctx.strokeStyle = 'rgba(150,140,255,0.35)';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(px + 4.5, py + 4.5, TILE - 9, TILE - 9);
+          ctx.lineWidth = 1;
+          ctx.fillStyle = 'rgba(190,185,255,0.5)';
+          ctx.beginPath();
+          ctx.arc(px + TILE / 2, py + TILE / 2, 6, 0.4, Math.PI * 2 - 0.4);
+          ctx.arc(px + TILE / 2 + 3, py + TILE / 2 - 1, 5, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
     }
@@ -326,7 +341,7 @@ export class Renderer {
     ctx.save();
     const grad = ctx.createRadialGradient(player.x, player.y, 90, player.x, player.y, 420);
     grad.addColorStop(0, 'rgba(6,5,12,0)');
-    grad.addColorStop(1, 'rgba(6,5,12,0.42)');
+    grad.addColorStop(1, 'rgba(6,5,12,0.30)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     ctx.restore();
@@ -358,7 +373,7 @@ export class Renderer {
       '',
       'Move  WASD / arrows      Sneak  Shift (quiet, slow)',
       'Throw a pebble  Q or mouse click (lure a guard away)',
-      'Hide in bushes and shadows — a guard only spots you up close there.',
+      'Hide behind planters and in shadows — a guard only spots you up close there.',
       '',
       'Press any key to begin.',
     ]);
