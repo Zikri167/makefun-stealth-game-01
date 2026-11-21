@@ -47,8 +47,8 @@ export class Guard {
   }
 
   // Can this guard see the player right now? Distance, cone angle,
-  // line of sight, and hiding: a player crouched in a bush or a shadow
-  // is only spotted at very close range.
+  // line of sight, and hiding: a player crouched behind a planter or
+  // in a shadow is only spotted at very close range.
   canSee(world, player) {
     const dx = player.x - this.x;
     const dy = player.y - this.y;
