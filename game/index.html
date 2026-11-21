@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ember Veil — a stealth game</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0d0a08;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+  }
+  #wrap { text-align: center; }
+  canvas {
+    width: 1280px;
+    height: 720px;
+    max-width: 96vw;
+    max-height: 92vh;
+    background: #14100c;
+    border: 1px solid #3a2c1e;
+    image-rendering: auto;
+  }
+  #help {
+    color: #8a7a5e;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  #help b { color: #d8c9a8; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="1280" height="720"></canvas>
+  <div id="help"><b>WASD / arrows</b> move &nbsp;·&nbsp; <b>Shift</b> sneak &nbsp;·&nbsp; <b>Q / click</b> throw a pebble &nbsp;·&nbsp; <b>P</b> pause &nbsp;·&nbsp; <b>R</b> restart</div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
